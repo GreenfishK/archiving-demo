@@ -7,13 +7,17 @@
 }
 
 .tabcontent {
-    display: none;
+    display: inline-block;
     padding: 6px 12px;
     border: 1px solid #ccc;
-    border-top: none;
-    min-width: 50%;
-    height: 400px;
+    /*border-top: none;*/
+    /*min-width: 50%;*/
+    /*height: 400px;*/
     overflow: scroll;
-    font-size: large;
-} 
+    /*font-size: large;*/
+}
 
+textarea {
+    width: 49%;
+    padding:1%;
+}

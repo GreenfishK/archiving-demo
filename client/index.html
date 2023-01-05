@@ -1,28 +1,44 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="en">
+<head>
     <link rel="stylesheet" href="index.css">
-    <title>Archiving Demo</title>    
+    <title>Archiving Demo</title>
     <script src="https://d3js.org/d3.v5.js"></script>
     <script src="app.js" defer></script>
-  </head>
-  <body>
-    <h1>Archiving Demo</h1>
-	 <div class="main">
-	      <div class="tab">
-		<button class="tablinks" onclick="openQueryTab(event,'queries')" id="defaultOpen">Queries</button>
-		<button class="tablinks" onclick="openQueryTab(event,'statistics')">Statistics</button>
-	      </div>
-	      <div id="queries" class="tabcontent">
-		<div id="queries-panel">Interface for queries</div>
-	      </div>
-	      <div id="statistics" class="tabcontent">
-	      <button onclick="runEvent('stats', {'message': ''}, handle_response_stats)">Click me!</button>
-		<div id="statistics-panel">Interface for statistics
-		</div>
-	      </div>
-	</div>
-
+</head>
+<body>
+<h1>Archiving Demo</h1>
+<div class="main">
+    <div class="tab">
+        <button class="tablinks" onclick="openQueryTab(event,'queries')" id="defaultOpen">Queries</button>
+        <button class="tablinks" onclick="openQueryTab(event,'statistics')">Statistics</button>
+    </div>
+    <div id="queries" class="tabcontent">
+        <div id="query-input">
+            <div>
+                <button>DM</button>
+                <button>VM</button>
+                <button>V</button>
+            </div>
+            <textarea id="query-input-field"
+                      spellcheck="false"
+                      placeholder="Input your query here."
+                      rows="10">
+            </textarea>
+            <div class="queryButtons">
+                <button>RUN</button>
+                <button onclick="clear_query_input()">CLEAR</button>
+            </div>
+        </div>
+        <div id="query-output">
+        </div>
+    </div>
+    <div id="statistics" class="tabcontent">
+        <button onclick="runEvent('stats', {'message': ''}, handle_response_stats)">Click me!</button>
+        <div id="statistics-panel">Interface for statistics
+        </div>
+    </div>
+</div>
 </body>
 </html>
 

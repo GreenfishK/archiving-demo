@@ -45,7 +45,11 @@ const handle_response_default = async (response) => {
 
 const handle_response_stats = async (response) => {
 	document.getElementById('statistics-panel').innerHTML = 'The server says: ' + response.answer;
-} 
+}
 
-runEvent('', {'message': 'Hallo Server!'}, handle_response_default);
+const clear_query_input = function () {
+    document.getElementById('query-input-field').value = '';
+}
+
+//runEvent('', {'message': 'Hallo Server!'}, handle_response_default);
 
