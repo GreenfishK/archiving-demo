@@ -4,6 +4,8 @@
     <link rel="stylesheet" href="index.css">
     <title>Archiving Demo</title>
     <script src="https://d3js.org/d3.v5.js"></script>
+    <link href="https://unpkg.com/@triply/yasgui/build/yasgui.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/@triply/yasgui/build/yasgui.min.js"></script>
     <script src="app.js" defer></script>
 </head>
 <body>
@@ -14,23 +16,23 @@
         <button class="tablinks" onclick="openQueryTab(event,'statistics')">Statistics</button>
     </div>
     <div id="queries" class="tabcontent">
-        <div id="query-input">
+        <div id="query-input" style="max-width: 950px">
             <div>
+                <b>Query template:</b>
                 <button>DM</button>
                 <button>VM</button>
                 <button>V</button>
             </div>
-            <textarea id="query-input-field"
-                      spellcheck="false"
-                      placeholder="Input your query here."
-                      rows="10">
-            </textarea>
+            <div id="yasgui"></div>
+            <script>
+                const yasgui = new Yasgui(document.getElementById("yasgui"), {
+                  requestConfig: { endpoint: "http://example.com/sparql" },
+                  copyEndpointOnNewTab: false,
+                });
+            </script>
             <div class="queryButtons">
-                <button>RUN</button>
-                <button onclick="clear_query_input()">CLEAR</button>
+                <button onclick="clear_query(yasgui)">CLEAR</button>
             </div>
-        </div>
-        <div id="query-output">
         </div>
     </div>
     <div id="statistics" class="tabcontent">
