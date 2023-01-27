@@ -2,11 +2,13 @@ import * as express from 'express'
 import * as bodyParser from 'body-parser'
 // @ts-expect-error
 import * as cors from 'cors'
+import { readFileSync } from 'fs'
+import * as csv from 'csv-parse/sync'
 
 const app: express.Express = express()
 const port = process.env.PORT ?? 3000
 
-app.use('/', express.static('../client'))
+app.use('/', express.static('./public'))
 app.use(express.json())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -25,7 +27,9 @@ app.post('/', (req, res) => {
 })
 
 app.post('/stats', (req, res) => {
-  const responseObj = { answer: 'Your server will soon implement this functionality. Be patient!' }
+  const statisticsBuffer = readFileSync('./data/stats1.csv').toString('utf8')
+  const statistics = csv.parse(statisticsBuffer)
+  const responseObj = { answer: statistics }
   res.write(JSON.stringify(responseObj))
   res.end()
 })

@@ -13,7 +13,7 @@
 <div class="main">
     <div class="tab">
         <button class="tablinks" onclick="openQueryTab(event,'queries')" id="defaultOpen">Queries</button>
-        <button class="tablinks" onclick="openQueryTab(event,'statistics')">Statistics</button>
+        <button class="tablinks" onclick="openQueryTab(event,'statistics');runEvent('stats', {'message': ''}, handle_response_stats)">Statistics</button>
     </div>
     <div id="queries" class="tabcontent">
         <div id="query-input" style="max-width: 1050px">
@@ -36,7 +36,7 @@
         </div>
     </div>
     <div id="statistics" class="tabcontent">
-        <button onclick="runEvent('stats', {'message': ''}, handle_response_stats)">Click me!</button>
+<!--        <button onclick="runEvent('stats', {'message': ''}, handle_response_stats)">Click me!</button>-->
         <div id="statistics-panel">Interface for statistics
         </div>
     </div>

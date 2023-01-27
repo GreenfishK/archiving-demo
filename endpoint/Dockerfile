@@ -2,8 +2,7 @@ FROM node:lts
 
 # Get repos
 RUN cd /opt && git clone https://github.com/dkw-aau/comunica-feature-versioning.git
-RUN cd /opt && git clone --recurse-submodules https://github.com/dkw-aau/ostrich-node.git
-RUN cd /opt/ostrich-node && git checkout dev
+RUN cd /opt && git clone --branch dev --recurse-submodules https://github.com/dkw-aau/ostrich-node.git
 
 # Prepare ostrich-node
 RUN apt-get update && apt-get -y install cmake libboost-iostreams-dev
