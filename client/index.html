@@ -16,22 +16,22 @@
         <button class="tablinks" onclick="openQueryTab(event,'statistics')">Statistics</button>
     </div>
     <div id="queries" class="tabcontent">
-        <div id="query-input" style="max-width: 950px">
+        <div id="query-input" style="max-width: 1050px">
             <div>
                 <b>Query template:</b>
-                <button>DM</button>
-                <button>VM</button>
-                <button>V</button>
+                <button onclick="set_dm_template(yasgui)">DM</button>
+                <button onclick="set_vm_template(yasgui)">VM</button>
+                <button onclick="set_v_template(yasgui)">V</button>
             </div>
             <div id="yasgui"></div>
             <script>
-                const yasgui = new Yasgui(document.getElementById("yasgui"), {
-                  requestConfig: { endpoint: "http://example.com/sparql" },
-                  copyEndpointOnNewTab: false,
-                });
+              const yasgui = new Yasgui(document.getElementById("yasgui"), {
+                requestConfig: { endpoint: "http://localhost:42564/sparql" },
+                copyEndpointOnNewTab: true,
+              });
             </script>
             <div class="queryButtons">
-                <button onclick="clear_query(yasgui)">CLEAR</button>
+                <button onclick="reset_query(yasgui)">RESET</button>
             </div>
         </div>
     </div>

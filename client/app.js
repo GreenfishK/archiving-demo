@@ -47,8 +47,68 @@ const handle_response_stats = async (response) => {
 	document.getElementById('statistics-panel').innerHTML = 'The server says: ' + response.answer;
 }
 
-const clear_query = async function (yasgui) {
-    yasgui.getTab().yasqe.setValue("");
+const clear_query_responses = async function (yasgui) {
+    yasgui.getTab().yasr.setResponse({
+        data: `{
+            "head": {
+                "vars": [
+                    "s",
+                    "p",
+                    "o"
+                ]
+            },
+            "results": {
+                "bindings": []
+            },
+            "metadata": {
+                "httpRequests": 0
+            }
+        }`,
+        contentType: "application/sparql-results+json",
+        status: 200,
+        executionTime: 0
+    });
+    yasgui.getTab().yasr.draw();
 }
+
+const reset_query = async function (yasgui) {
+    let qr_str = 'SELECT * WHERE {\n';
+    qr_str += '\tGRAPH <version:0> {\n';
+    qr_str += '\t\t?s ?p ?o .\n';
+    qr_str += '\t}\n';
+    qr_str += '} LIMIT 5';
+    yasgui.getTab().yasqe.setValue(qr_str);
+    clear_query_responses(yasgui);
+}
+
+const set_vm_template = async function (yasgui) {
+    reset_query(yasgui);
+}
+
+const set_dm_template = async function (yasgui) {
+    let qr_str = 'SELECT * WHERE {\n';
+    qr_str += '\tGRAPH <version:2> {\n';
+    qr_str += '\t\t?s ?p ?o .\n';
+    qr_str += '\t} .\n';
+    qr_str += '\tFILTER (NOT EXISTS {\n';
+    qr_str += '\t\tGRAPH <version:0> {\n';
+    qr_str += '\t\t\t?s ?p ?o .\n';
+    qr_str += '\t\t}\n';
+    qr_str += '\t})\n'
+    qr_str += '} LIMIT 5';
+    yasgui.getTab().yasqe.setValue(qr_str);
+    clear_query_responses(yasgui);
+}
+
+const set_v_template = async function (yasgui) {
+    let qr_str = 'SELECT * WHERE {\n';
+    qr_str += '\tGRAPH <version:?> {\n';
+    qr_str += '\t\t?s ?p ?o .\n';
+    qr_str += '\t}\n';
+    qr_str += '} LIMIT 5';
+    yasgui.getTab().yasqe.setValue(qr_str);
+    clear_query_responses(yasgui);
+}
+
 //runEvent('', {'message': 'Hallo Server!'}, handle_response_default);
 
