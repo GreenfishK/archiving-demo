@@ -1,4 +1,4 @@
-const ROOT_APP = "http://localhost:3000"
+const ROOT_APP = "http://130.225.39.214:3000"
 
 // Routine to manage the two main tabs of the application
 const openQueryTab = (evt, tabName) => {
@@ -25,7 +25,6 @@ const openQueryTab = (evt, tabName) => {
 // Get the element with id="defaultOpen" and click on it
 document.getElementById("defaultOpen").click();
 
-
 const runEvent = async (action, data, handler_fn) => {
     const response = await fetch(`${ROOT_APP}/${action}`,{
         method: "POST",
@@ -36,15 +35,31 @@ const runEvent = async (action, data, handler_fn) => {
     response.json().then(handler_fn);
 }
 
-/**
-* Add some pertinent doc.
-*/
-const handle_response_default = async (response) => {
-	document.getElementById('queries-panel').innerHTML = 'The server says: ' + response.answer;
-}
-
-const handle_response_stats = async (response) => {
-	document.getElementById('statistics-panel').innerHTML = 'The server says: ' + response.answer;
+const handle_stats = async function (response) {
+    const data = response.answer
+    let versions = []
+    let cr = []
+    let dyn = []
+    let gr = []
+    let ec = []
+    let tec = []
+    let oc = []
+    // Change-ratio
+    for (let i in data) {
+        versions.push(parseInt(data[i]['Version']))
+        cr.push(parseInt(data[i]['Change-ratio']))
+        dyn.push(parseInt(data[i]['Dynamicity']))
+        gr.push(parseInt(data[i]['Growth-ratio']))
+        ec.push(parseInt(data[i]['Entity-changes']))
+        tec.push(parseInt(data[i]['Triple-to-entity-change']))
+        oc.push(parseInt(data[i]['Object-updates']))
+    }
+    Plotly.newPlot("plot-change-ratio", [{ x: versions, y: cr, type: 'lines+markers'}], {title: "Change-ratio"})
+    Plotly.newPlot("plot-dynamicity", [{ x: versions, y: dyn, type: 'lines+markers'}], {title: "Dynamicity"})
+    Plotly.newPlot("plot-growth-ratio", [{ x: versions, y: gr, type: 'lines+markers'}], {title: "Growth-ratio"})
+    Plotly.newPlot("plot-entity-change", [{ x: versions, y: ec, type: 'lines+markers'}], {title: "Entity-changes"})
+    Plotly.newPlot("plot-triple-entity-change", [{ x: versions, y: tec, type: 'lines+markers'}], {title: "Triple-to-entity-change"})
+    Plotly.newPlot("plot-object-updates", [{ x: versions, y: oc, type: 'lines+markers'}], {title: "Object-updates"})
 }
 
 const clear_query_responses = async function (yasgui) {
@@ -78,11 +93,11 @@ const reset_query = async function (yasgui) {
     qr_str += '\t}\n';
     qr_str += '} LIMIT 5';
     yasgui.getTab().yasqe.setValue(qr_str);
-    clear_query_responses(yasgui);
+    await clear_query_responses(yasgui);
 }
 
 const set_vm_template = async function (yasgui) {
-    reset_query(yasgui);
+    await reset_query(yasgui);
 }
 
 const set_dm_template = async function (yasgui) {
@@ -97,7 +112,7 @@ const set_dm_template = async function (yasgui) {
     qr_str += '\t})\n'
     qr_str += '} LIMIT 5';
     yasgui.getTab().yasqe.setValue(qr_str);
-    clear_query_responses(yasgui);
+    await clear_query_responses(yasgui);
 }
 
 const set_v_template = async function (yasgui) {
@@ -107,8 +122,5 @@ const set_v_template = async function (yasgui) {
     qr_str += '\t}\n';
     qr_str += '} LIMIT 5';
     yasgui.getTab().yasqe.setValue(qr_str);
-    clear_query_responses(yasgui);
+    await clear_query_responses(yasgui);
 }
-
-//runEvent('', {'message': 'Hallo Server!'}, handle_response_default);
-

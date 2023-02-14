@@ -3,9 +3,9 @@
 <head>
     <link rel="stylesheet" href="index.css">
     <title>GLENDA: Running SPARQL Queries on RDF Archives</title>
-    <script src="https://d3js.org/d3.v5.js"></script>
     <link href="https://unpkg.com/@triply/yasgui/build/yasgui.min.css" rel="stylesheet" type="text/css" />
     <script src="https://unpkg.com/@triply/yasgui/build/yasgui.min.js"></script>
+    <script src="/lib/plotly/plotly.min.js"></script>
     <script src="app.js" defer></script>
 </head>
 <body>
@@ -13,7 +13,7 @@
 <div class="main">
     <div class="tab">
         <button class="tablinks" onclick="openQueryTab(event,'queries')" id="defaultOpen">Queries</button>
-        <button class="tablinks" onclick="openQueryTab(event,'statistics');runEvent('stats', {'message': ''}, handle_response_stats)">Statistics</button>
+        <button class="tablinks" onclick="openQueryTab(event,'statistics');runEvent('stats', {'message': ''}, handle_stats)">Statistics</button>
     </div>
     <div id="queries" class="tabcontent">
         <div id="query-input" style="max-width: 1050px">
@@ -26,7 +26,7 @@
             <div id="yasgui"></div>
             <script>
               const yasgui = new Yasgui(document.getElementById("yasgui"), {
-                requestConfig: { endpoint: "http://localhost:42564/sparql" },
+                requestConfig: { endpoint: "http://130.225.39.214:42564/sparql" },
                 copyEndpointOnNewTab: true,
               });
             </script>
@@ -36,8 +36,14 @@
         </div>
     </div>
     <div id="statistics" class="tabcontent">
-<!--        <button onclick="runEvent('stats', {'message': ''}, handle_response_stats)">Click me!</button>-->
-        <div id="statistics-panel">Interface for statistics
+        <b>Statistics for the BEAR-C dataset</b>
+        <div id="statistics-panel" class="grid-container">
+            <div id="plot-change-ratio" class="grid-item"></div>
+            <div id="plot-dynamicity" class="grid-item"></div>
+            <div id="plot-growth-ratio" class="grid-item"></div>
+            <div id="plot-entity-change" class="grid-item"></div>
+            <div id="plot-triple-entity-change" class="grid-item"></div>
+            <div id="plot-object-updates" class="grid-item"></div>
         </div>
     </div>
 </div>

@@ -21,3 +21,17 @@ textarea {
     width: 49%;
     padding:1%;
 }
+
+body {
+    font-family: sans-serif;
+}
+
+.yasgui .autocompleteWrapper {
+    display: none !important;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 10px;
+}

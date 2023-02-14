@@ -16,4 +16,4 @@ RUN cd /opt/comunica-feature-versioning && yarn link ostrich-bindings && yarn in
 EXPOSE 42564
 
 # Entrypoint
-ENTRYPOINT [ "node", "/opt/comunica-feature-versioning/engines/query-sparql-ostrich/bin/http.js", "-p 42564", "-l debug", "ostrichFile@/var/ostrich" ]
+ENTRYPOINT [ "node", "/opt/comunica-feature-versioning/engines/query-sparql-ostrich/bin/http.js", "-p 42564", "-t 120", "-l debug", "ostrichFile@/var/ostrich" ]
