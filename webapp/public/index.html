@@ -3,8 +3,8 @@
 <head>
     <link rel="stylesheet" href="index.css">
     <title>GLENDA: Running SPARQL Queries on RDF Archives</title>
-    <link href="https://unpkg.com/@triply/yasgui/build/yasgui.min.css" rel="stylesheet" type="text/css" />
-    <script src="https://unpkg.com/@triply/yasgui/build/yasgui.min.js"></script>
+    <link href="/lib/yasgui/yasgui.min.css" rel="stylesheet" type="text/css" />
+    <script src="/lib/yasgui/yasgui.min.js"></script>
     <script src="/lib/plotly/plotly.min.js"></script>
     <script src="app.js" defer></script>
 </head>
@@ -12,17 +12,26 @@
 <h1>GLENDA: Running SPARQL Queries on RDF Archives</h1>
 <div class="main">
     <div class="tab">
-        <button class="tablinks" onclick="openQueryTab(event,'queries')" id="defaultOpen">Queries</button>
-        <button class="tablinks" onclick="openQueryTab(event,'statistics');runEvent('stats', {'message': ''}, handle_stats)">Statistics</button>
+        <button class="tablinks" onclick="openQueryTab(event,'queries');runEvent('queries', {}, handleQueries)" id="defaultOpen">Queries</button>
+        <button class="tablinks" onclick="openQueryTab(event,'statistics');runEvent('stats', {}, handleStats)">Statistics</button>
     </div>
     <div id="queries" class="tabcontent">
         <div id="query-input" style="max-width: 1050px">
             <div>
-                <b>Query template:</b>
-                <button onclick="set_dm_template(yasgui)">DM</button>
-                <button onclick="set_vm_template(yasgui)">VM</button>
-                <button onclick="set_v_template(yasgui)">V</button>
+                <b>Query selection:</b>
+                <br>
+                <select name="queries-select" id="queries-select"></select>
+                <label for="queries-select"></label>
+                <form name="query-type-form" id="query-type-form">
+                    <input type="radio" id="vm" name="query-type" value="vm" onclick="drawQuery()" checked>
+                    <label for="vm">VM</label>
+                    <input type="radio" id="dm" name="query-type" value="dm" onclick="drawQuery()">
+                    <label for="dm">DM</label>
+                    <input type="radio" id="vq" name="query-type" value="vq" onclick="drawQuery()">
+                    <label for="vq">VQ</label>
+                </form>
             </div>
+            <br>
             <div id="yasgui"></div>
             <script>
               const yasgui = new Yasgui(document.getElementById("yasgui"), {
@@ -31,7 +40,7 @@
               });
             </script>
             <div class="queryButtons">
-                <button onclick="reset_query(yasgui)">RESET</button>
+                <button onclick="resetQuery(yasgui)">RESET</button>
             </div>
         </div>
     </div>

@@ -14,6 +14,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors())
 app.use('/lib/plotly/', express.static('node_modules/plotly.js-dist-min/'))
+app.use('/lib/yasgui/', express.static('node_modules/@triply/yasgui/build/'))
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}...`)
@@ -31,6 +32,14 @@ app.post('/stats', (req, res) => {
   const statisticsBuffer = readFileSync('./data/stats1.csv').toString('utf8')
   const statistics = csv.parse(statisticsBuffer, { columns: true })
   const responseObj = { answer: statistics }
+  res.write(JSON.stringify(responseObj))
+  res.end()
+})
+
+app.post('/queries', (req, res) => {
+  const queriesBuffer = readFileSync('./data/queries.json').toString('utf8')
+  const queries = JSON.parse(queriesBuffer)
+  const responseObj = { answer: queries }
   res.write(JSON.stringify(responseObj))
   res.end()
 })

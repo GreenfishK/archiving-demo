@@ -1,4 +1,4 @@
-const ROOT_APP = "http://130.225.39.214:3000"
+const ROOT_APP = 'http://130.225.39.214:3000'
 
 // Routine to manage the two main tabs of the application
 const openQueryTab = (evt, tabName) => {
@@ -22,9 +22,6 @@ const openQueryTab = (evt, tabName) => {
     evt.currentTarget.className += " active";
 }
 
-// Get the element with id="defaultOpen" and click on it
-document.getElementById("defaultOpen").click();
-
 const runEvent = async (action, data, handler_fn) => {
     const response = await fetch(`${ROOT_APP}/${action}`,{
         method: "POST",
@@ -35,7 +32,7 @@ const runEvent = async (action, data, handler_fn) => {
     response.json().then(handler_fn);
 }
 
-const handle_stats = async function (response) {
+const handleStats = async function (response) {
     const data = response.answer
     let versions = []
     let cr = []
@@ -62,7 +59,7 @@ const handle_stats = async function (response) {
     Plotly.newPlot("plot-object-updates", [{ x: versions, y: oc, type: 'lines+markers'}], {title: "Object-updates"})
 }
 
-const clear_query_responses = async function (yasgui) {
+const clearQueryResponses = async function () {
     yasgui.getTab().yasr.setResponse({
         data: `{
             "head": {
@@ -86,21 +83,81 @@ const clear_query_responses = async function (yasgui) {
     yasgui.getTab().yasr.draw();
 }
 
-const reset_query = async function (yasgui) {
-    let qr_str = 'SELECT * WHERE {\n';
-    qr_str += '\tGRAPH <version:0> {\n';
-    qr_str += '\t\t?s ?p ?o .\n';
-    qr_str += '\t}\n';
-    qr_str += '} LIMIT 5';
-    yasgui.getTab().yasqe.setValue(qr_str);
-    await clear_query_responses(yasgui);
+const handleQuerySelect = async function (selection) {
+    window.querySelection = selection.value
+    await drawQuery()
 }
 
-const set_vm_template = async function (yasgui) {
-    await reset_query(yasgui);
+const handleQueries = async function (response) {
+    window.queries = response.answer
+    const queryDropdown = document.getElementById('queries-select')
+    for (const q in response.answer) {
+        let queryOption = document.createElement('option')
+        queryOption.setAttribute('value', q)
+        queryOption.setAttribute('onClick', 'handleQuerySelect(this)')
+        const keyName = q === '0' ? "Default" : `Query ${q}`
+        let queryText = document.createTextNode(keyName)
+        queryOption.appendChild(queryText)
+        queryDropdown.appendChild(queryOption)
+    }
+    await handleQuerySelect(queryDropdown.firstChild)
 }
 
-const set_dm_template = async function (yasgui) {
+const drawVersionQuerySection = function (version, extraIndent) {
+    const indent = extraIndent ? '\t' : ''
+    const versionTag = version === '?version' ? version : `<version:${version}>`
+    let str = `\n\t${indent}GRAPH ${versionTag} {`
+    for (const l in window.queries[window.querySelection]["core"]) {
+        str += `\n\t\t${indent}${window.queries[window.querySelection]["core"][l]}`
+    }
+    str += `\n\t${indent}}`
+    return str
+}
+
+const drawQuery = async function () {
+    await clearQueryResponses()
+    let queryHeader = ''
+    let firstHeader = true
+    for (const l in window.queries[window.querySelection]["header"]) {
+        const newline = firstHeader ? '' : '\n'
+        queryHeader += newline + window.queries[window.querySelection]["header"][l]
+        firstHeader = false
+    }
+    const queryTypeRadios = document.getElementsByName('query-type')
+    const queryType = Array.from(queryTypeRadios).find((radio) => radio.checked).value
+    let queryCore = 'SELECT * WHERE {'
+    switch (queryType) {
+        case 'vm':
+            queryCore += drawVersionQuerySection(1, false)
+            break
+        case 'dm':
+            queryCore += drawVersionQuerySection(1, false) + ' .'
+            queryCore += '\n\tFILTER (NOT EXISTS {'
+            queryCore += drawVersionQuerySection(4, true)
+            queryCore += '\n\t})'
+            break
+        case 'vq':
+            queryCore += drawVersionQuerySection('?version', false)
+            break
+        default:
+            console.log('???')
+    }
+    queryCore += '\n}'
+    const query = `${queryHeader}\n${queryCore}`
+    yasgui.getTab().yasqe.setValue(query)
+}
+
+const resetQuery = async function () {
+    const querySelectDropdown = document.getElementById('queries-select')
+    querySelectDropdown.value = "0"
+    window.querySelection = "0"
+}
+
+const setVMTemplate = async function () {
+    await resetQuery(yasgui);
+}
+
+const setDMTemplate = async function () {
     let qr_str = 'SELECT * WHERE {\n';
     qr_str += '\tGRAPH <version:2> {\n';
     qr_str += '\t\t?s ?p ?o .\n';
@@ -112,15 +169,18 @@ const set_dm_template = async function (yasgui) {
     qr_str += '\t})\n'
     qr_str += '} LIMIT 5';
     yasgui.getTab().yasqe.setValue(qr_str);
-    await clear_query_responses(yasgui);
+    await clearQueryResponses(yasgui);
 }
 
-const set_v_template = async function (yasgui) {
+const setVQTemplate = async function () {
     let qr_str = 'SELECT * WHERE {\n';
     qr_str += '\tGRAPH <version:?> {\n';
     qr_str += '\t\t?s ?p ?o .\n';
     qr_str += '\t}\n';
     qr_str += '} LIMIT 5';
     yasgui.getTab().yasqe.setValue(qr_str);
-    await clear_query_responses(yasgui);
+    await clearQueryResponses(yasgui);
 }
+
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
