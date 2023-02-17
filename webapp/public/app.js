@@ -153,34 +153,5 @@ const resetQuery = async function () {
     window.querySelection = "0"
 }
 
-const setVMTemplate = async function () {
-    await resetQuery(yasgui);
-}
-
-const setDMTemplate = async function () {
-    let qr_str = 'SELECT * WHERE {\n';
-    qr_str += '\tGRAPH <version:2> {\n';
-    qr_str += '\t\t?s ?p ?o .\n';
-    qr_str += '\t} .\n';
-    qr_str += '\tFILTER (NOT EXISTS {\n';
-    qr_str += '\t\tGRAPH <version:0> {\n';
-    qr_str += '\t\t\t?s ?p ?o .\n';
-    qr_str += '\t\t}\n';
-    qr_str += '\t})\n'
-    qr_str += '} LIMIT 5';
-    yasgui.getTab().yasqe.setValue(qr_str);
-    await clearQueryResponses(yasgui);
-}
-
-const setVQTemplate = async function () {
-    let qr_str = 'SELECT * WHERE {\n';
-    qr_str += '\tGRAPH <version:?> {\n';
-    qr_str += '\t\t?s ?p ?o .\n';
-    qr_str += '\t}\n';
-    qr_str += '} LIMIT 5';
-    yasgui.getTab().yasqe.setValue(qr_str);
-    await clearQueryResponses(yasgui);
-}
-
 // Get the element with id="defaultOpen" and click on it
 document.getElementById("defaultOpen").click();
