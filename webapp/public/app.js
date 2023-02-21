@@ -88,6 +88,11 @@ const handleQuerySelect = async function (selection) {
     await drawQuery()
 }
 
+// Handle the queries being received from the server
+// - populate query dropdown
+// - set version sliders default values (should maybe be done somewhere else ? at tab loading ?)
+// - set default query type from radio button
+// - get the default query to draw into yasgui by calling handleQuerySelect()
 const handleQueries = async function (response) {
     window.queries = response.answer
     const queryDropdown = document.getElementById('queries-select')
@@ -100,6 +105,17 @@ const handleQueries = async function (response) {
         queryOption.appendChild(queryText)
         queryDropdown.appendChild(queryOption)
     }
+    // Set default version value for sliders and declare global variables
+    window.queryStartVersion = "0"
+    document.getElementById('start-version-range').value = window.queryStartVersion
+    document.getElementById('start-version-output').innerText = window.queryStartVersion
+    window.queryEndVersion = "1"
+    document.getElementById('end-version-range').value = window.queryEndVersion
+    document.getElementById('end-version-output').innerText = window.queryEndVersion
+    // Set default query type
+    const queryTypeRadios = document.getElementsByName('query-type')
+    window.queryType = Array.from(queryTypeRadios).find((radio) => radio.checked).value
+    // Draw default query
     await handleQuerySelect(queryDropdown.firstChild)
 }
 
@@ -114,8 +130,28 @@ const drawVersionQuerySection = function (version, extraIndent) {
     return str
 }
 
+const showHideVersionSelectors = function () {
+    const startVersionSelector = document.getElementById("start-version-selector")
+    const endVersionSelector = document.getElementById("end-version-selector")
+    switch (window.queryType) {
+        case 'vm':
+            startVersionSelector.style.display = "block"
+            endVersionSelector.style.display = "none"
+            break
+        case 'dm':
+            startVersionSelector.style.display = "block"
+            endVersionSelector.style.display = "block"
+            break
+        case 'vq':
+            startVersionSelector.style.display = "none"
+            endVersionSelector.style.display = "none"
+    }
+}
+
 const drawQuery = async function () {
     await clearQueryResponses()
+    showHideVersionSelectors()
+    // Get the selected query's header
     let queryHeader = ''
     let firstHeader = true
     for (const l in window.queries[window.querySelection]["header"]) {
@@ -123,17 +159,16 @@ const drawQuery = async function () {
         queryHeader += newline + window.queries[window.querySelection]["header"][l]
         firstHeader = false
     }
-    const queryTypeRadios = document.getElementsByName('query-type')
-    const queryType = Array.from(queryTypeRadios).find((radio) => radio.checked).value
+    // Get the selected query's core
     let queryCore = 'SELECT * WHERE {'
-    switch (queryType) {
+    switch (window.queryType) {
         case 'vm':
-            queryCore += drawVersionQuerySection(1, false)
+            queryCore += drawVersionQuerySection(window.queryStartVersion, false)
             break
         case 'dm':
-            queryCore += drawVersionQuerySection(1, false) + ' .'
+            queryCore += drawVersionQuerySection(window.queryStartVersion, false) + ' .'
             queryCore += '\n\tFILTER (NOT EXISTS {'
-            queryCore += drawVersionQuerySection(4, true)
+            queryCore += drawVersionQuerySection(window.queryEndVersion, true)
             queryCore += '\n\t})'
             break
         case 'vq':
@@ -142,16 +177,95 @@ const drawQuery = async function () {
         default:
             console.log('???')
     }
-    queryCore += '\n}'
+    queryCore += '\n} LIMIT 20\n'
     const query = `${queryHeader}\n${queryCore}`
     yasgui.getTab().yasqe.setValue(query)
+}
+
+const onSliderUpdate = async function (slider) {
+    switch (slider.name) {
+        case 'start-version-range':
+            window.queryStartVersion = slider.value
+            document.getElementById('start-version-output').innerText = slider.value
+            break
+        case 'end-version-range':
+            window.queryEndVersion = slider.value
+            document.getElementById('end-version-output').innerText = slider.value
+            break
+    }
+    await drawQuery()
+}
+
+const onClickQueryType = async function (radio) {
+    window.queryType = radio.value
+    await drawQuery()
 }
 
 const resetQuery = async function () {
     const querySelectDropdown = document.getElementById('queries-select')
     querySelectDropdown.value = "0"
     window.querySelection = "0"
+    await drawQuery()
 }
+
+const handleQueryChange = async function (instance, req) {
+    // Find the version(s) identifier(s)
+    const vRegex = /GRAPH (<version:)?(\d+|\?[a-zA-Z]+)>?/g
+    const matches = instance.getValue().matchAll(vRegex)
+    let matchCount = 0
+    let values = []
+    for (const match of matches) {
+        matchCount++
+        values.push(match[2])
+    }
+    // Detect the query type
+    // and change the checked radio button accordingly
+    switch (values.length) {
+        case 0:
+            console.log('Unrecognized version query')
+            break
+        case 1:
+            if (values[0][0] === '?') {
+                window.queryType = 'vq'
+                document.getElementById('vq').checked = true
+            } else {
+                window.queryType = 'vm'
+                document.getElementById('vm').checked = true
+            }
+            break
+        case 2:
+            window.queryType = 'dm'
+            document.getElementById('dm').checked = true
+            break
+        default:
+            console.log('Unknown query type')
+    }
+    showHideVersionSelectors()
+    // Update the version selectors with the new values
+    switch (window.queryType) {
+        case 'vm':
+            window.queryStartVersion = values[0]
+            document.getElementById('start-version-range').value = window.queryStartVersion
+            document.getElementById('start-version-output').innerText = window.queryStartVersion
+            break
+        case 'dm':
+            window.queryStartVersion = values[0]
+            window.queryEndVersion = values[1]
+            document.getElementById('start-version-range').value = window.queryStartVersion
+            document.getElementById('end-version-range').value = window.queryEndVersion
+            document.getElementById('start-version-output').innerText = window.queryStartVersion
+            document.getElementById('end-version-output').innerText = window.queryEndVersion
+            break
+        default:
+    }
+}
+
+const handleQueryTabOpen = async function (instance, newTabId) {
+    instance.getTab(newTabId).getYasqe().on("changes", handleQueryChange)
+}
+
+yasgui.on("tabSelect", handleQueryTabOpen)
+yasgui.getTab().getYasqe().on("changes", handleQueryChange)
 
 // Get the element with id="defaultOpen" and click on it
 document.getElementById("defaultOpen").click();

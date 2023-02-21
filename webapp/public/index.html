@@ -23,12 +23,23 @@
                 <select name="queries-select" id="queries-select"></select>
                 <label for="queries-select"></label>
                 <form name="query-type-form" id="query-type-form">
-                    <input type="radio" id="vm" name="query-type" value="vm" onclick="drawQuery()" checked>
+                    <input type="radio" id="vm" name="query-type" value="vm" onclick="onClickQueryType(this)" checked>
                     <label for="vm">VM</label>
-                    <input type="radio" id="dm" name="query-type" value="dm" onclick="drawQuery()">
+                    <input type="radio" id="dm" name="query-type" value="dm" onclick="onClickQueryType(this)">
                     <label for="dm">DM</label>
-                    <input type="radio" id="vq" name="query-type" value="vq" onclick="drawQuery()">
+                    <input type="radio" id="vq" name="query-type" value="vq" onclick="onClickQueryType(this)">
                     <label for="vq">VQ</label>
+
+                    <div class="version-selector" id="start-version-selector">
+                        <label for="start-version-range" id="start-version-value">Start version: </label>
+                        <input type="range" id="start-version-range" name="start-version-range" min="0" max="32" step="1" onchange="onSliderUpdate(this)">
+                        <output for="start-version-range" id="start-version-output"></output>
+                    </div>
+                    <div class="version-selector" id="end-version-selector">
+                        <label for="end-version-range" id="end-version-value">End version: </label>
+                        <input type="range" id="end-version-range" name="end-version-range" min="0" max="32" step="1" onchange="onSliderUpdate(this)">
+                        <output for="end-version-range" id="end-version-output"></output>
+                    </div>
                 </form>
             </div>
             <br>
