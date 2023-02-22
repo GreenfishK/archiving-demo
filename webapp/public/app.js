@@ -44,19 +44,23 @@ const handleStats = async function (response) {
     // Change-ratio
     for (let i in data) {
         versions.push(parseInt(data[i]['Version']))
-        cr.push(parseInt(data[i]['Change-ratio']))
-        dyn.push(parseInt(data[i]['Dynamicity']))
-        gr.push(parseInt(data[i]['Growth-ratio']))
+        cr.push(parseFloat(data[i]['Change-ratio']))
+        dyn.push(parseFloat(data[i]['Dynamicity']))
+        gr.push(parseFloat(data[i]['Growth-ratio']))
         ec.push(parseInt(data[i]['Entity-changes']))
-        tec.push(parseInt(data[i]['Triple-to-entity-change']))
+        tec.push(parseFloat(data[i]['Triple-to-entity-change']))
         oc.push(parseInt(data[i]['Object-updates']))
     }
-    Plotly.newPlot("plot-change-ratio", [{ x: versions, y: cr, type: 'lines+markers'}], {title: "Change-ratio"})
-    Plotly.newPlot("plot-dynamicity", [{ x: versions, y: dyn, type: 'lines+markers'}], {title: "Dynamicity"})
-    Plotly.newPlot("plot-growth-ratio", [{ x: versions, y: gr, type: 'lines+markers'}], {title: "Growth-ratio"})
-    Plotly.newPlot("plot-entity-change", [{ x: versions, y: ec, type: 'lines+markers'}], {title: "Entity-changes"})
-    Plotly.newPlot("plot-triple-entity-change", [{ x: versions, y: tec, type: 'lines+markers'}], {title: "Triple-to-entity-change"})
-    Plotly.newPlot("plot-object-updates", [{ x: versions, y: oc, type: 'lines+markers'}], {title: "Object-updates"})
+    const xAxis = {
+        title: 'Version',
+        showgrid: true
+    }
+    Plotly.newPlot("plot-change-ratio", [{ x: versions, y: cr, mode: 'lines+markers'}], {title: "Change-ratio", xaxis: xAxis})
+    Plotly.newPlot("plot-dynamicity", [{ x: versions, y: dyn, mode: 'lines+markers'}], {title: "Dynamicity", xaxis: xAxis})
+    Plotly.newPlot("plot-growth-ratio", [{ x: versions, y: gr, mode: 'lines+markers'}], {title: "Growth-ratio", xaxis: xAxis})
+    Plotly.newPlot("plot-entity-change", [{ x: versions, y: ec, mode: 'lines+markers'}], {title: "Entity-changes", xaxis: xAxis})
+    Plotly.newPlot("plot-triple-entity-change", [{ x: versions, y: tec, mode: 'lines+markers'}], {title: "Triple-to-entity-change", xaxis: xAxis})
+    Plotly.newPlot("plot-object-updates", [{ x: versions, y: oc, type: 'bar'}], {title: "Object-updates", xaxis: xAxis})
 }
 
 const clearQueryResponses = async function () {
