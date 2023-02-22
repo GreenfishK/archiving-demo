@@ -20,7 +20,7 @@
             <div>
                 <b>Query selection:</b>
                 <br>
-                <select name="queries-select" id="queries-select"></select>
+                <select name="queries-select" id="queries-select" onchange="handleQuerySelect(this)"></select>
                 <label for="queries-select"></label>
                 <form name="query-type-form" id="query-type-form">
                     <input type="radio" id="vm" name="query-type" value="vm" onclick="onClickQueryType(this)" checked>

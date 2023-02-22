@@ -99,7 +99,6 @@ const handleQueries = async function (response) {
     for (const q in response.answer) {
         let queryOption = document.createElement('option')
         queryOption.setAttribute('value', q)
-        queryOption.setAttribute('onClick', 'handleQuerySelect(this)')
         const keyName = q === '0' ? "Default" : `Query ${q}`
         let queryText = document.createTextNode(keyName)
         queryOption.appendChild(queryText)
