@@ -8,38 +8,42 @@
     <script src="/lib/plotly/plotly.min.js"></script>
     <script src="app.js" defer></script>
 </head>
-<body>
-<h1>GLENDA: Running SPARQL Queries on RDF Archives</h1>
+<body onload="openQueryTab(event,'queries');runEvent('queries', {}, handleQueries);">
+<div id="title">
+    <h1>GLENDA: Running SPARQL Queries on RDF Archives</h1>
+</div>
 <div class="main">
     <div class="tab">
-        <button class="tablinks" onclick="openQueryTab(event,'queries');runEvent('queries', {}, handleQueries)" id="defaultOpen">Queries</button>
-        <button class="tablinks" onclick="openQueryTab(event,'statistics');runEvent('stats', {}, handleStats)">Statistics</button>
+        <button class="tablinks querybtn" onclick="openQueryTab(event,'queries');runEvent('queries', {}, handleQueries)" id="defaultOpen">Queries</button><button class="tablinks statsbtn" onclick="openQueryTab(event,'statistics');runEvent('stats', {}, handleStats)">Statistics</button>
     </div>
     <div id="queries" class="tabcontent">
         <div id="query-input" style="max-width: 1050px">
-            <div>
-                <b>Query selection:</b>
-                <br>
-                <select name="queries-select" id="queries-select" onchange="handleQuerySelect(this)"></select>
-                <label for="queries-select"></label>
+            <div id="query-options-panel">
+                <span class="querysellabel">Example Queries:</span> 
+                <span class="selector">    
+                    <select name="queries-select" id="queries-select" onchange="handleQuerySelect(this)"></select>
+                    <label for="queries-select"></label>
+                </span>
+                <span>
                 <form name="query-type-form" id="query-type-form">
+                    <span class="querysellabel">Query Type: </span>
                     <input type="radio" id="vm" name="query-type" value="vm" onclick="onClickQueryType(this)" checked>
                     <label for="vm">VM</label>
                     <input type="radio" id="dm" name="query-type" value="dm" onclick="onClickQueryType(this)">
                     <label for="dm">DM</label>
                     <input type="radio" id="vq" name="query-type" value="vq" onclick="onClickQueryType(this)">
                     <label for="vq">VQ</label>
-
-                    <div class="version-selector" id="start-version-selector">
-                        <label for="start-version-range" id="start-version-value">Start version: </label>
+                </span>
+                <div class="version-selector" id="start-version-selector">
+                        <label class="querysellabel" for="start-version-range" id="start-version-value">Start version: </label>
                         <input type="range" id="start-version-range" name="start-version-range" min="0" max="32" step="1" onchange="onSliderUpdate(this)">
                         <output for="start-version-range" id="start-version-output"></output>
                     </div>
                     <div class="version-selector" id="end-version-selector">
-                        <label for="end-version-range" id="end-version-value">End version: </label>
+                        <label class="querysellabel" for="end-version-range" id="end-version-value">End version: </label>
                         <input type="range" id="end-version-range" name="end-version-range" min="0" max="32" step="1" onchange="onSliderUpdate(this)">
                         <output for="end-version-range" id="end-version-output"></output>
-                    </div>
+                    </div>                    
                 </form>
             </div>
             <br>
@@ -51,7 +55,7 @@
               });
             </script>
             <div class="queryButtons">
-                <button onclick="resetQuery(yasgui)">RESET</button>
+                <button class="resetbtn" onclick="resetQuery(yasgui)">RESET</button>
             </div>
         </div>
     </div>

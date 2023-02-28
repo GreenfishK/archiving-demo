@@ -1,3 +1,16 @@
+#title {
+    color: white;
+    background-color: #666;
+    text-align: center;
+    font-family: Avantgarde, "TeX Gyre Adventor", "URW Gothic L", sans-serif;
+    min-height: 50px;
+    margin: auto;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
 .tab button:hover {
     background-color: #ddd;
 }
@@ -24,6 +37,10 @@ textarea {
 
 body {
     font-family: sans-serif;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 20px;
 }
 
 .yasgui .autocompleteWrapper {
@@ -34,4 +51,85 @@ body {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     padding: 10px;
+}
+
+div.main {
+    margin-top: 5px;
+}
+
+.tablinks{
+    min-height: 50px;
+    min-width: 120px;
+    margin: 0px;
+    text-align: right;
+    font-family: Avantgarde, "TeX Gyre Adventor", "URW Gothic L", sans-serif;
+    padding-right: 10px;
+}
+
+.querybtn {
+    background: url('query.png') no-repeat scroll 0 0 transparent;
+}
+
+.statsbtn {
+    background: url('stats.png') no-repeat scroll 0 0 transparent;
+}
+
+.resetbtn {
+    min-height: 50px;
+    min-width: 120px;
+    margin: 0px;
+    text-align: right;
+    font-family: Avantgarde, "TeX Gyre Adventor", "URW Gothic L", sans-serif;
+    padding-right: 10px;
+    background: url('reset.png') no-repeat scroll 0 0 #ccc;
+}
+
+.queryButtons {
+    margin-left: 20px;
+}
+
+button.active {
+    font-weight: bold;   
+    border: #666;
+}
+
+.querysellabel {
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 20px;
+}
+
+#form {
+    margin-top: 10px;
+}
+
+#query-type-form {
+    display: inline;
+}
+
+.selector {
+    margin-right: 50px;
+}
+
+#query-options-panel {
+    margin-top: 15px;
+    margin-left: 20px;
+}
+
+#queries-select {
+    font-family: Avantgarde, "TeX Gyre Adventor", "URW Gothic L", sans-serif;
+    font-size: 20px;
+}
+
+#start-version-selector {
+    margin-top: 20px;
+}
+
+#start-version-selector, #end-version-selector {
+    margin-bottom: 20px;
+}
+
+#start-version-range, #end-version-range {
+    min-width: 100%;
 }
