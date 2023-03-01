@@ -92,14 +92,34 @@ const handleQuerySelect = async function (selection) {
     await drawQuery()
 }
 
-// Handle the queries being received from the server
-// - populate query dropdown
+// Set default values for query interface
 // - set version sliders default values (should maybe be done somewhere else ? at tab loading ?)
 // - set default query type from radio button
 // - get the default query to draw into yasgui by calling handleQuerySelect()
+const setQueryDefault = async function () {
+    // Set default version value for sliders and declare global variables
+    window.queryStartVersion = (window.queryStartVersion === undefined) ? "0" : window.queryStartVersion
+    document.getElementById('start-version-range').value = window.queryStartVersion
+    document.getElementById('start-version-output').innerText = window.queryStartVersion
+    window.queryEndVersion = (window.queryEndVersion === undefined) ? "2" : window.queryEndVersion
+    document.getElementById('end-version-range').value = window.queryEndVersion
+    document.getElementById('end-version-output').innerText = window.queryEndVersion
+    // Get query type
+    const queryTypeRadios = document.getElementsByName('query-type')
+    window.queryType = Array.from(queryTypeRadios).find((radio) => radio.checked).value
+    // Draw default query
+    const queryDropDown = document.getElementById('queries-select')
+    window.querySelection = (window.querySelection === undefined) ? queryDropDown.firstChild.value : window.querySelection
+    queryDropDown.value = window.querySelection
+    await drawQuery()
+}
+
+// Handle the queries being received from the server
+// - populate query dropdown
 const handleQueries = async function (response) {
     window.queries = response.answer
     const queryDropdown = document.getElementById('queries-select')
+    queryDropdown.innerHTML = ''  // clear the dropdown of elements (if any)
     for (const q in response.answer) {
         let queryOption = document.createElement('option')
         queryOption.setAttribute('value', q)
@@ -108,18 +128,7 @@ const handleQueries = async function (response) {
         queryOption.appendChild(queryText)
         queryDropdown.appendChild(queryOption)
     }
-    // Set default version value for sliders and declare global variables
-    window.queryStartVersion = "0"
-    document.getElementById('start-version-range').value = window.queryStartVersion
-    document.getElementById('start-version-output').innerText = window.queryStartVersion
-    window.queryEndVersion = "1"
-    document.getElementById('end-version-range').value = window.queryEndVersion
-    document.getElementById('end-version-output').innerText = window.queryEndVersion
-    // Set default query type
-    const queryTypeRadios = document.getElementsByName('query-type')
-    window.queryType = Array.from(queryTypeRadios).find((radio) => radio.checked).value
-    // Draw default query
-    await handleQuerySelect(queryDropdown.firstChild)
+   await setQueryDefault()
 }
 
 const drawVersionQuerySection = function (version, extraIndent) {
@@ -182,7 +191,37 @@ const drawQuery = async function () {
     }
     queryCore += '\n} LIMIT 20\n'
     const query = `${queryHeader}\n${queryCore}`
-    yasgui.getTab().yasqe.setValue(query)
+    yasgui.getTab().setQuery(query)
+}
+
+// Redraw the current query only changing versioning information
+const reDrawQuery = async function () {
+    const vRegex = /GRAPH <version:\d+>?/g
+    let query = yasgui.getTab().getQuery()
+    switch (window.queryType) {
+        case undefined:
+            await setQueryDefault()
+            break
+        case 'vm':
+            query = query.replaceAll(vRegex, `GRAPH <version:${window.queryStartVersion}>`)
+            break
+        case 'dm':
+            const matches = query.matchAll(vRegex)
+            let i = 0
+            for (const match of matches) {
+                if (i % 2 === 0) {
+                    query = query.replace(match[0], `GRAPH <version:${window.queryStartVersion}>`)
+                } else {
+                    query = query.replace(match[0], `GRAPH <version:${window.queryEndVersion}>`)
+                }
+                i++
+            }
+            break
+        case 'vq':
+            // do nothing
+            break
+    }
+    yasgui.getTab().setQuery(query)
 }
 
 const onSliderUpdate = async function (slider) {
@@ -196,7 +235,7 @@ const onSliderUpdate = async function (slider) {
             document.getElementById('end-version-output').innerText = slider.value
             break
     }
-    await drawQuery()
+    await reDrawQuery()
 }
 
 const onClickQueryType = async function (radio) {

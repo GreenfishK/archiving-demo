@@ -15,5 +15,8 @@ RUN cd /opt/comunica-feature-versioning && yarn link ostrich-bindings && yarn in
 # Expose the port used by the Endpoint
 EXPOSE 42564
 
+# Node to production
+ENV NODE_ENV=production
+
 # Entrypoint
 ENTRYPOINT [ "node", "/opt/comunica-feature-versioning/engines/query-sparql-ostrich/bin/http.js", "-p 42564", "-t 480", "-l debug", "ostrichFile@/var/ostrich" ]

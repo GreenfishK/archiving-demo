@@ -23,11 +23,7 @@
     display: inline-block;
     padding: 6px 12px;
     border: 1px solid #ccc;
-    /*border-top: none;*/
-    /*min-width: 50%;*/
-    /*height: 400px;*/
     overflow: scroll;
-    /*font-size: large;*/
 }
 
 body {
@@ -55,7 +51,7 @@ div.main {
 .tablinks{
     min-height: 50px;
     min-width: 120px;
-    margin: 0px;
+    margin: 0;
     text-align: right;
     font-family: Avantgarde, "TeX Gyre Adventor", "URW Gothic L", sans-serif;
     padding-right: 10px;
@@ -72,10 +68,14 @@ div.main {
 .resetbtn {
     min-height: 50px;
     min-width: 120px;
-    margin: 0px;
+    margin: 0;
     text-align: right;
     padding-right: 10px;
-    background: url('reset.png') no-repeat scroll 0 0 #ccc;
+    background: url('reset.png') no-repeat scroll 0 0 transparent;
+}
+
+.resetbtn:hover {
+    background: url('reset.png') no-repeat scroll 0 0 #ddd;
 }
 
 .queryButtons {
@@ -148,8 +148,8 @@ button.active {
     border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
   }
   
-  /* Tooltip text */
-  .tooltip .tooltiptext {
+/* Tooltip text */
+.tooltip .tooltiptext {
     visibility: hidden;
     background-color: gray;
     color: #fff;
@@ -161,9 +161,9 @@ button.active {
     position: absolute;
     z-index: 3;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  }
+}
   
-  /* Show the tooltip text when you mouse over the tooltip container */
-  .tooltip:hover .tooltiptext {
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
     visibility: visible;
-  }
+}
