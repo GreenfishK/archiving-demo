@@ -28,11 +28,11 @@
                 <form name="query-type-form" id="query-type-form">
                     <span class="querysellabel">Query Type: </span>
                     <input type="radio" id="vm" name="query-type" value="vm" onclick="onClickQueryType(this)" checked>
-                    <label for="vm">VM</label>
+                    <label for="vm" class="tooltip">VM<span class="tooltiptext">Version Materialization: Query a given version of the archive</span></label>
                     <input type="radio" id="dm" name="query-type" value="dm" onclick="onClickQueryType(this)">
-                    <label for="dm">DM</label>
+                    <label for="dm" class="tooltip">DM<span class="tooltiptext">Delta Materialization: Query a changeset between two versions</span></label>
                     <input type="radio" id="vq" name="query-type" value="vq" onclick="onClickQueryType(this)">
-                    <label for="vq">VQ</label>
+                    <label for="vq" class="tooltip">VQ<span class="tooltiptext">Version Query: Annotate solutions with the version when they occur</span></label>
                 </span>
                 <div class="version-selector" id="start-version-selector">
                         <label class="querysellabel" for="start-version-range" id="start-version-value">Start version: </label>
