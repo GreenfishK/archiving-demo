@@ -30,11 +30,6 @@
     /*font-size: large;*/
 }
 
-textarea {
-    width: 49%;
-    padding:1%;
-}
-
 body {
     font-family: Avantgarde, "TeX Gyre Adventor", "URW Gothic L", sans-serif;
     width: 65%;
@@ -140,4 +135,8 @@ button.active {
 
 #query-input {
     width: 95%;
+}
+
+.yasqe .CodeMirror {
+    font-size: 20px !important;
 }
