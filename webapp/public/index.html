@@ -17,8 +17,8 @@
         <button class="tablinks querybtn" onclick="openQueryTab(event,'queries');runEvent('queries', {}, handleQueries)" id="defaultOpen">Queries</button><button class="tablinks statsbtn" onclick="openQueryTab(event,'statistics');runEvent('stats', {}, handleStats)">Statistics</button>
     </div>
     <div id="queries" class="tabcontent">
-        <div id="query-input" style="max-width: 1050px">
-            <div id="query-options-panel">
+        <div id="query-input">
+            <div id="query-options-panel" class="query-options-panel">
                 <span class="querysellabel">Example Queries:</span> 
                 <span class="selector">    
                     <select name="queries-select" id="queries-select" onchange="handleQuerySelect(this)"></select>
@@ -60,7 +60,7 @@
         </div>
     </div>
     <div id="statistics" class="tabcontent">
-        <b>Statistics for the BEAR-C dataset</b>
+        <div class="query-options-panel"><span class="querysellabel">Statistics for the BEAR-C dataset</span>
         <div id="statistics-panel" class="grid-container">
             <div id="plot-change-ratio" class="grid-item"></div>
             <div id="plot-dynamicity" class="grid-item"></div>
@@ -68,6 +68,7 @@
             <div id="plot-entity-change" class="grid-item"></div>
             <div id="plot-triple-entity-change" class="grid-item"></div>
             <div id="plot-object-updates" class="grid-item"></div>
+        </div>
         </div>
     </div>
 </div>

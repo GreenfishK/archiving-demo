@@ -36,8 +36,8 @@ textarea {
 }
 
 body {
-    font-family: sans-serif;
-    width: 80%;
+    font-family: Avantgarde, "TeX Gyre Adventor", "URW Gothic L", sans-serif;
+    width: 65%;
     margin-left: auto;
     margin-right: auto;
     font-size: 20px;
@@ -79,7 +79,6 @@ div.main {
     min-width: 120px;
     margin: 0px;
     text-align: right;
-    font-family: Avantgarde, "TeX Gyre Adventor", "URW Gothic L", sans-serif;
     padding-right: 10px;
     background: url('reset.png') no-repeat scroll 0 0 #ccc;
 }
@@ -112,7 +111,7 @@ button.active {
     margin-right: 50px;
 }
 
-#query-options-panel {
+.query-options-panel {
     margin-top: 15px;
     margin-left: 20px;
 }
@@ -132,4 +131,13 @@ button.active {
 
 #start-version-range, #end-version-range {
     min-width: 100%;
+}
+
+#yasgui {
+    margin-left: 20px;
+    width: 100%;
+}
+
+#query-input {
+    width: 95%;
 }
