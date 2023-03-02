@@ -8,13 +8,14 @@
     <script src="/lib/plotly/plotly.min.js"></script>
     <script src="app.js" defer></script>
 </head>
-<body onload="openQueryTab(event,'queries');runEvent('queries', {}, handleQueries);">
+<body onload="openQueryTab()">
 <div id="title">
     <h1>GLENDA: Running SPARQL Queries on RDF Archives</h1>
 </div>
 <div class="main">
     <div class="tab">
-        <button class="tablinks querybtn" onclick="openQueryTab(event,'queries');runEvent('queries', {}, handleQueries)" id="defaultOpen">Queries</button><button class="tablinks statsbtn" onclick="openQueryTab(event,'statistics');runEvent('stats', {}, handleStats)">Statistics</button>
+        <button class="tablinks querybtn" onclick="openQueryTab()" id="query-tab">Queries</button>
+        <button class="tablinks statsbtn" onclick="openStatsTab()" id="stats-tab">Statistics</button>
     </div>
     <div id="queries" class="tabcontent">
         <div id="query-input">

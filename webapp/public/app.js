@@ -1,7 +1,7 @@
 const ROOT_APP = 'http://130.225.39.214:3000'
 
 // Routine to manage the two main tabs of the application
-const openQueryTab = (evt, tabName) => {
+const openTab = (button, tabName) => {
     // Declare all variables
     let i, tabcontent, tablinks;
 
@@ -19,7 +19,7 @@ const openQueryTab = (evt, tabName) => {
 
     // Show the current tab, and add an "active" class to the button that opened the tab
     document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
+    button.className += " active";
 }
 
 const runEvent = async (action, data, handler_fn) => {
@@ -30,6 +30,36 @@ const runEvent = async (action, data, handler_fn) => {
         body: JSON.stringify(data)
     });
     response.json().then(handler_fn);
+}
+
+const openQueryTab = async function () {
+    const queryButton = document.getElementById('query-tab')
+    openTab(queryButton, 'queries')
+    await runEvent('queries', {}, handleQueries)
+    await runEvent('snapshots', {}, (response) => {
+        let snapshotList = document.getElementById('snapshot-list')
+        if (snapshotList === null) {
+            console.log(response.answer)
+            snapshotList = document.createElement('datalist')
+            snapshotList.setAttribute('class', 'snapshot-list')
+            snapshotList.setAttribute('id', 'snapshot-list')
+            for (const snapshot in response.answer.snapshots) {
+                const v = response.answer.snapshots[snapshot]
+                const snapshotListItem = document.createElement('option')
+                snapshotListItem.setAttribute('value', v)
+                snapshotList.appendChild(snapshotListItem)
+            }
+            document.getElementById('query-options-panel').appendChild(snapshotList)
+            document.getElementById('start-version-range').setAttribute('list', 'snapshot-list')
+            document.getElementById('end-version-range').setAttribute('list', 'snapshot-list')
+        }
+    })
+}
+
+const openStatsTab = async function () {
+    const statsButton = document.getElementById('stats-tab')
+    openTab(statsButton, 'statistics')
+    await runEvent('stats', {}, handleStats)
 }
 
 const handleStats = async function (response) {
@@ -309,5 +339,5 @@ const handleQueryTabOpen = async function (instance, newTabId) {
 yasgui.on("tabSelect", handleQueryTabOpen)
 yasgui.getTab().getYasqe().on("changes", handleQueryChange)
 
-// Get the element with id="defaultOpen" and click on it
-document.getElementById("defaultOpen").click();
+// Get the element with id="query-tab" and click on it
+document.getElementById("query-tab").click();

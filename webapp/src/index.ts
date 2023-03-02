@@ -43,3 +43,15 @@ app.post('/queries', (req, res) => {
   res.write(JSON.stringify(responseObj))
   res.end()
 })
+
+app.post('/snapshots', (req, res) => {
+  const snapshots = [0, 5, 11, 19, 29]
+  const versions = []
+  for (let i = 0; i <= 32; i++) {
+    versions.push(i)
+  }
+  const responseData = { snapshots, versions }
+  const responseObj = { answer: responseData }
+  res.write(JSON.stringify(responseObj))
+  res.end()
+})
