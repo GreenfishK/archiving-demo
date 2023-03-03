@@ -86,7 +86,7 @@ const handleStats = async function (response) {
         showgrid: true
     }
     Plotly.newPlot("plot-change-ratio", [{ x: versions, y: cr, mode: 'lines+markers'}], {title: "Change-ratio", xaxis: xAxis})
-    Plotly.newPlot("plot-dynamicity", [{ x: versions, y: dyn, mode: 'lines+markers'}], {title: "Dynamicity", xaxis: xAxis})
+    Plotly.newPlot("plot-dynamicity", [{ x: versions, y: dyn, mode: 'lines+markers'}], {title: "Vocabulary Dynamicity", xaxis: xAxis})
     Plotly.newPlot("plot-growth-ratio", [{ x: versions, y: gr, mode: 'lines+markers'}], {title: "Growth-ratio", xaxis: xAxis})
     Plotly.newPlot("plot-entity-change", [{ x: versions, y: ec, mode: 'lines+markers'}], {title: "Entity-changes", xaxis: xAxis})
     Plotly.newPlot("plot-triple-entity-change", [{ x: versions, y: tec, mode: 'lines+markers'}], {title: "Triple-to-entity-change", xaxis: xAxis})

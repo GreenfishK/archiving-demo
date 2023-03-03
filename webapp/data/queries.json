@@ -1,10 +1,13 @@
 {
     "0": {
         "core": {
-            "1": "?subj ?pred ?obj ."
+            "1": "?dataset rdf:type dcat:Dataset .",
+            "2": "?dataset dc:modified ?modified_date ."
         },
         "header": {
-            "0": "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
+            "0": "PREFIX dcat: <http://www.w3.org/ns/dcat#>",
+            "1": "PREFIX dc: <http://purl.org/dc/terms/>",
+            "2": "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
         }
     },
     "1": {
