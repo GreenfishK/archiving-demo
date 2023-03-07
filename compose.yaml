@@ -1,0 +1,11 @@
+services:
+  endpoint:
+    build: ./endpoint/
+    ports:
+      - "42564:42564"
+    volumes:
+      - ./data/:/var/ostrich
+  webapp:
+    build: ./webapp/
+    ports:
+      - "3000:3000"
