@@ -1,5 +1,6 @@
-# OSTRICH Archiving Demo
-Demo for querying RDF archives with versioned SPARQL queries.
+# GLENDA: Querying over RDF Archives with SPARQL
+This repository contains the source code and files to run and deploy the GLENDA system.
+GLENDA is a system providing and user interface to query RDF Archives with full SPARQL 1.1 compliant queries.
 
 ## Docker Compose
 
