@@ -1,4 +1,4 @@
-const ROOT_APP = 'http://130.225.39.214:3000'
+const ROOT_APP = self.location.origin
 
 // Routine to manage the two main tabs of the application
 const openTab = (button, tabName) => {
@@ -39,7 +39,6 @@ const openQueryTab = async function () {
     await runEvent('snapshots', {}, (response) => {
         let snapshotList = document.getElementById('snapshot-list')
         if (snapshotList === null) {
-            console.log(response.answer)
             snapshotList = document.createElement('datalist')
             snapshotList.setAttribute('class', 'snapshot-list')
             snapshotList.setAttribute('id', 'snapshot-list')
