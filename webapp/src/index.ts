@@ -60,6 +60,7 @@ app.post('/snapshots', (req, res) => {
 app.post('/sparql', (req, res) => {
   const response = fetch('http://localhost:42564/sparql', {
     method: 'POST',
+    mode: 'cors',
     headers: { 'Content-Type': 'application/sparql-query', Accept: 'application/sparql-results+json' },
     body: req.body.query
   })
