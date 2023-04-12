@@ -55,3 +55,22 @@ app.post('/snapshots', (req, res) => {
   res.write(JSON.stringify(responseObj))
   res.end()
 })
+
+// Proxy the sparql endpoint
+app.post('/sparql', (req, res) => {
+  const response = fetch('http://localhost:42564/sparql', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/sparql-query', Accept: 'application/sparql-results+json' },
+    body: req.body.query
+  })
+  response.then(result => {
+    result.text().then(txt => {
+      res.write(txt)
+      res.end()
+    }).catch(error => {
+      console.error(error)
+    })
+  }).catch(error => {
+    console.error(error)
+  })
+})

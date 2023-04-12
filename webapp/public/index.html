@@ -49,7 +49,7 @@
             <div id="yasgui"></div>
             <script>
               const yasgui = new Yasgui(document.getElementById("yasgui"), {
-                requestConfig: { endpoint: `http://${self.location.hostname}:42564/sparql` },
+                requestConfig: { endpoint: `${self.location.origin}/sparql` },
                 copyEndpointOnNewTab: true,
               });
             </script>
