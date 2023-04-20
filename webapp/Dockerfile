@@ -4,6 +4,7 @@ FROM node:lts
 COPY data /opt/demo/data
 COPY src /opt/demo/src
 COPY public /opt/demo/public
+COPY config /opt/demo/config
 COPY package.json /opt/demo/
 COPY tsconfig.json /opt/demo/
 

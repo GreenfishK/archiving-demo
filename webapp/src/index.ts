@@ -6,12 +6,18 @@ import * as cors from 'cors'
 import { readFileSync } from 'fs'
 import * as csv from 'csv-parse/sync'
 
-// Whether HTTPS should be activated
-const supportHttps = true
+interface Configuration {
+  supportHttps: boolean
+  httpsKeyFile: string
+  httpsCertFile: string
+  endpointAddress: string
+  httpPort: number
+  httpsPort: number
+}
+
+const configuration: Configuration = JSON.parse(readFileSync('./config/config.json').toString('utf8'))
 
 const app: express.Express = express()
-const portHttp = 3000
-const portHttps = 3001
 
 app.use('/', express.static('./public'))
 app.use(express.json())
@@ -21,18 +27,18 @@ app.use(cors())
 app.use('/lib/plotly/', express.static('node_modules/plotly.js-dist-min/'))
 app.use('/lib/yasgui/', express.static('node_modules/@triply/yasgui/build/'))
 
-if (supportHttps) {
-  const key = readFileSync('/var/https/privkey.pem')
-  const cert = readFileSync('/var/https/cert.pem')
+if (configuration.supportHttps) {
+  const key = readFileSync(configuration.httpsKeyFile)
+  const cert = readFileSync(configuration.httpsCertFile)
   const httpsOptions = {
     key: key,
     cert: cert
   }
-  https.createServer(httpsOptions, app).listen(portHttps)
+  https.createServer(httpsOptions, app).listen(configuration.httpsPort)
 }
 
-app.listen(portHttp, () => {
-  console.log(`Listening on port ${portHttp}...`)
+app.listen(configuration.httpPort, () => {
+  console.log(`Listening on port ${configuration.httpPort}...`)
 })
 
 app.post('/', (req, res) => {

@@ -1,0 +1,8 @@
+{
+  "supportHttps": true,
+  "httpsKeyFile": "/var/https/privkey1.pem",
+  "httpsCertFile": "/var/https/cert1.pem",
+  "endpointAddress": "http://host.docker.internal:42564/sparql",
+  "httpPort": 3000,
+  "httpsPort": 3001
+}
