@@ -79,19 +79,36 @@ app.post('/snapshots', (req, res) => {
 
 // Proxy the sparql endpoint
 app.post('/sparql', (req, res) => {
-  const response = fetch('http://host.docker.internal:42564/sparql', {
+  const response = fetch(configuration.endpointAddress, {
     method: 'POST',
     mode: 'cors',
     headers: { 'Content-Type': 'application/sparql-query', Accept: 'application/sparql-results+json' },
     body: req.body.query
   })
   response.then(result => {
-    result.text().then(txt => {
-      res.write(txt)
+    const contentType = result.headers.get('Content-type')
+    if (contentType === null) {
+      console.error('The endpoint did not specify a content type.')
       res.end()
-    }).catch(error => {
-      console.error(error)
-    })
+      return
+    }
+    res.set('Content-type', contentType)
+    if (result.body !== null) {
+      const reader = result.body.getReader()
+      function read (): void {
+        reader.read().then(({ done, value }) => {
+          if (done) {
+            res.end()
+            return
+          }
+          res.write(value)
+          read()
+        }).catch(reason => {
+          console.error(reason)
+        })
+      }
+      read()
+    }
   }).catch(error => {
     console.error(error)
   })
