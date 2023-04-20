@@ -1,12 +1,17 @@
 import * as express from 'express'
+import * as https from 'https'
 import * as bodyParser from 'body-parser'
 // @ts-expect-error
 import * as cors from 'cors'
 import { readFileSync } from 'fs'
 import * as csv from 'csv-parse/sync'
 
+// Whether HTTPS should be activated
+const supportHttps = true
+
 const app: express.Express = express()
-const port = process.env.PORT ?? 3000
+const portHttp = 3000
+const portHttps = 3001
 
 app.use('/', express.static('./public'))
 app.use(express.json())
@@ -16,8 +21,18 @@ app.use(cors())
 app.use('/lib/plotly/', express.static('node_modules/plotly.js-dist-min/'))
 app.use('/lib/yasgui/', express.static('node_modules/@triply/yasgui/build/'))
 
-app.listen(port, () => {
-  console.log(`Listening on port ${port}...`)
+if (supportHttps) {
+  const key = readFileSync('/var/https/privkey.pem')
+  const cert = readFileSync('/var/https/cert.pem')
+  const httpsOptions = {
+    key: key,
+    cert: cert
+  }
+  https.createServer(httpsOptions, app).listen(portHttps)
+}
+
+app.listen(portHttp, () => {
+  console.log(`Listening on port ${portHttp}...`)
 })
 
 app.post('/', (req, res) => {
@@ -58,7 +73,7 @@ app.post('/snapshots', (req, res) => {
 
 // Proxy the sparql endpoint
 app.post('/sparql', (req, res) => {
-  const response = fetch('http://localhost:42564/sparql', {
+  const response = fetch('http://host.docker.internal:42564/sparql', {
     method: 'POST',
     mode: 'cors',
     headers: { 'Content-Type': 'application/sparql-query', Accept: 'application/sparql-results+json' },
