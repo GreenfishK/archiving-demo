@@ -9,5 +9,7 @@ services:
     build: ./webapp/
     ports:
       - "3000:3000"
+    volumes:
+      - ./http:/var/https
     extra_hosts:
       - host.docker.internal:host-gateway

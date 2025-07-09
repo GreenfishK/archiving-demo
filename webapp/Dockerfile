@@ -1,4 +1,4 @@
-FROM node:lts
+FROM node:18
 
 # Copy source and data
 COPY data /opt/demo/data
