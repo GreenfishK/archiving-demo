@@ -1,4 +1,4 @@
-FROM node:lts
+FROM node:18
 
 # Get repos
 RUN cd /opt && git clone https://github.com/dkw-aau/comunica-feature-versioning.git
